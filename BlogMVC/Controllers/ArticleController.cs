@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BlogMVC.Models;
+using BlogMVC.ViewModels;
 using Microsoft.AspNet.Identity;
 
 namespace BlogMVC.Controllers
@@ -47,12 +48,23 @@ namespace BlogMVC.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Title,BodyText")] Article article)
+        public ActionResult Create(ArticleVM viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             var User_ID = User.Identity.GetUserId();
-            article.ArtistId = User_ID;
-            article.Author = db.Users.FirstOrDefault(x => x.Id == User_ID);
-            article.DateTime = DateTime.Now;
+
+            var article = new Article
+            {
+                ArtistId = User_ID,
+                Author = db.Users.FirstOrDefault(x => x.Id == User_ID),
+                DateTime = DateTime.Now,
+                Title = viewModel.Title,
+                BodyText = viewModel.BodyText
+            };
 
             db.Articles.Add(article);
             db.SaveChanges();
