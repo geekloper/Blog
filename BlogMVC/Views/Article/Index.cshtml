@@ -11,25 +11,31 @@
         <div class="col-lg-8 col-md-10 mx-auto">
 
             @foreach (var item in Model)
-            {
-                <h2>@Html.DisplayFor(modelItem => item.Title) </h2>
-                <h5> @Html.DisplayFor(modelItem => item.BodyText).ToString().Substring(0, 150) ... </h5>
-                if(Request.IsAuthenticated){
-                    <div class="btn-group">
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default" })
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
-                    </div>
-                }
-                else { 
-                    @Html.ActionLink("Lire", "Details", new { id = item.Id }, new { @class = "btn btn-default" })
-                }
-                <h5>
-                    <span class="glyphicon glyphicon-calendar"></span>
-                    @Html.DisplayFor(modelItem => item.DateTime);
-                </h5>
-                <hr />
-            }
+    {
+        <h2>@Html.DisplayFor(modelItem => item.Title) </h2>
+        <h5> @Html.DisplayFor(modelItem => item.BodyText).ToString().Substring(0, 150) ... </h5>
+        
+        <div class="pull-right">
+            <h5>
+                <span class="glyphicon glyphicon-calendar"></span>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </h5>
+        </div>
+        
+        if (Request.IsAuthenticated)
+        {
+        <div class="btn-group">
+            @Html.ActionLink("Modifier", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Lire", "Details", new { id = item.Id }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Supprimer", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+        </div>
+        }
+        else
+        {
+            @Html.ActionLink("Lire >", "Details", new { id = item.Id }, new { @class = "btn btn-primary" })
+        }
+        <hr />
+        }
 
         </div>
     </div>
