@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace BlogMVC.Models
 
         [Required]
         [Column(TypeName = "text")]
+        [DisplayName("Your article")]
+        [DataType(DataType.MultilineText)]
         public string BodyText { get; set; }
 
         public ApplicationUser Author { get; set; }

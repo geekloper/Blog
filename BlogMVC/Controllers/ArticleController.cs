@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BlogMVC.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BlogMVC.Controllers
 {
@@ -35,6 +36,7 @@ namespace BlogMVC.Controllers
             return View(article);
         }
 
+        [Authorize]
         // GET: Article/Create
         public ActionResult Create()
         {
@@ -42,18 +44,19 @@ namespace BlogMVC.Controllers
         }
 
         // POST: Article/Create
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,DateTime,Title,BodyText,ArtistId")] Article article)
+        public ActionResult Create([Bind(Include = "Title,BodyText")] Article article)
         {
-            if (ModelState.IsValid)
-            {
-                db.Articles.Add(article);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            var User_ID = User.Identity.GetUserId();
+            article.ArtistId = User_ID;
+            article.Author = db.Users.FirstOrDefault(x => x.Id == User_ID);
+            article.DateTime = DateTime.Now;
 
-            return View(article);
+            db.Articles.Add(article);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: Article/Edit/5
